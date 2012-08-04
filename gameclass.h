@@ -26,12 +26,14 @@ class GameClass {
     size_t VerticalConsecutive (int, size_t, size_t) const;
     void RemoveH (size_t, size_t, size_t);
     void RemoveV (size_t, size_t, size_t);
+    void Fall ();
+    void Down (size_t, size_t);
 
     void DrawGame () const;
-    void DrawBall (int, float, float) const;
+    void DrawBall (bool, int, float, float) const;
 
     // Game
-    int **grid;
+    int **grid, **gridNew;
     size_t gridWidth, gridHeight;
 
     // Allegro
@@ -45,10 +47,11 @@ class GameClass {
     ALLEGRO_BITMAP *level;
     ALLEGRO_AUDIO_STREAM *music;
     
-    bool done, blocked;
+    bool done, locked;
 
     bool hasFailed;
     int errorValue;
+    float falling;
 };
 
 #endif

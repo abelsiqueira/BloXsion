@@ -19,14 +19,20 @@ GameClass::GameClass () {
     }
     return;
   }
+  
+  locked = false;
 
   gridWidth = cWindowWidth/cTileSize;
   gridHeight = cWindowHeight/cTileSize;
+
   grid = new int*[gridHeight];
+  gridNew = new int*[gridHeight];
   for (size_t i = 0; i < gridHeight; i++) {
     grid[i] = new int[gridWidth];
+    gridNew[i] = new int[gridWidth];
     for (size_t j = 0; j < gridWidth; j++) {
       grid[i][j] = rand()%cMaxBalls;
+      gridNew[i][j] = grid[i][j];
     }
   }
 
@@ -82,9 +88,12 @@ int GameClass::AllegroInitialization () {
 }
 
 GameClass::~GameClass () {
-  for (size_t i = 0; i < gridHeight; i++)
+  for (size_t i = 0; i < gridHeight; i++) {
     delete []grid[i];
+    delete []gridNew[i];
+  }
   delete []grid;
+  delete []gridNew;
 
   al_destroy_font(bigFont);
   al_destroy_font(normalFont);
@@ -105,6 +114,7 @@ void GameClass::Run () {
     al_wait_for_event(eventQueue, &ev);
 
     if (ev.type == ALLEGRO_EVENT_TIMER) {
+      Update();
       redraw = true;
     } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       done = true;
@@ -119,7 +129,6 @@ void GameClass::Run () {
           done = true;
           break;
         default:
-          Update();
           break;
       }
     }

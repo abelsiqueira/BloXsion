@@ -4,12 +4,22 @@
 void GameClass::DrawGame () const {
   for (size_t i = 0; i < gridHeight; i++) {
     for (size_t j = 0; j < gridWidth; j++) {
-      DrawBall(grid[i][j], j*cTileSize, i*cTileSize);
+      int type = grid[i][j];
+      if (type != -1) {
+        bool fall = false;
+        for (size_t k = i+1; k < gridHeight; k++) {
+          if (grid[k][j] == -1) {
+            fall = true;
+            break;
+          }
+        }
+        DrawBall(fall, type, j*cTileSize, i*cTileSize);
+      }
     }
   }
 }
 
-void GameClass::DrawBall (int b, float x, float y) const {
+void GameClass::DrawBall (bool fall, int b, float x, float y) const {
   ALLEGRO_COLOR color;
 
   switch (b) {
@@ -42,6 +52,8 @@ void GameClass::DrawBall (int b, float x, float y) const {
     count = 0;
 
   float cx = x + cTileSize/2, cy = y + cTileSize/2, radius = cTileSize*2/5;
+  if (fall)
+    cy += cTileSize - falling;
   float mx = cos(count), my = sin(count);
 
   al_draw_filled_circle(cx, cy, radius, color);

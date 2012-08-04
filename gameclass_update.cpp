@@ -1,27 +1,83 @@
 #include "gameclass.h"
 
 void GameClass::Update () {
-  for (size_t i = 0; i < gridHeight; i++) {
-    for (size_t j = 0; j < gridWidth; j++) {
-      Verify(i, j);
+  if (!locked) {
+    for (size_t i = 0; i < gridHeight; i++) {
+      for (size_t j = 0; j < gridWidth; j++) {
+        Verify(i, j);
+      }
+    }
+  } else {
+    Fall();
+  }
+}
+
+void GameClass::Fall () {
+  falling -= fallingSpeed;
+  if (falling <= 0) {
+    falling = 0;
+    locked = false;
+    for (size_t i = 0; i < gridHeight; i++) {
+      for (size_t j = 0; j < gridWidth; j++) {
+        if (grid[i][j] == -1)
+          Down(i, j);
+      }
+    }
+    for (size_t i = 0; i < gridHeight; i++) {
+      for (size_t j = 0; j < gridWidth; j++) {
+        grid[i][j] = gridNew[i][j];
+      }
+    }
+    for (size_t i = 0; i < gridHeight; i++) {
+      for (size_t j = 0; j < gridWidth; j++) {
+        if (grid[i][j] == -1) {
+          locked = true;
+          falling = cTileSize;
+          break;
+        }
+      }
+      if (locked) break;
     }
   }
 }
 
-void GameClass::Verify (size_t i, size_t j) {
-  if (grid[i][j] == -1)
+void GameClass::Down (size_t i, size_t j) {
+  if (i == 0) {
+    gridNew[i][j] = rand()%cMaxBalls;
     return;
+  }
+  gridNew[i][j] = grid[i-1][j];
+  Down(i-1, j);
+}
 
-  size_t nh = HorizontalConsecutive(grid[i][j], i, j),
-      nv = VerticalConsecutive(grid[i][j], i, j);
+void GameClass::Verify (size_t i, size_t j) {
+  if (grid[i][j] == -1) {
+    locked = true;
+    falling = cTileSize;
+  } else {
+    size_t nh = HorizontalConsecutive(grid[i][j], i, j),
+        nv = VerticalConsecutive(grid[i][j], i, j);
 
-  bool horz = (nh > 2 ? true : false),
-       vert = (nv > 2 ? true : false);
+    bool horz = (nh > 2 ? true : false),
+         vert = (nv > 2 ? true : false);
 
-  if (horz) {
-    RemoveH(i, j, nh);
-  } else if (vert) {
-    RemoveV(i, j, nv);
+    if (horz) {
+      RemoveH(i, j, nh);
+      locked = true;
+      falling = cTileSize;
+    } else if (vert) {
+      RemoveV(i, j, nv);
+      locked = true;
+      falling = cTileSize;
+    }
+  }
+
+  if (locked) {
+    for (size_t i = 0; i < gridHeight; i++) {
+      for (size_t j = 0; j < gridWidth; j++) {
+        gridNew[i][j] = grid[i][j];
+      }
+    }
   }
 }
 
@@ -47,10 +103,10 @@ size_t GameClass::HorizontalConsecutive(int type, size_t i, size_t j) const {
 }
 
 size_t GameClass::VerticalConsecutive(int type, size_t i, size_t j) const {
-  if (j == gridWidth)
+  if (i == gridHeight)
     return 0;
   else if (grid[i][j] == type)
-    return 1 + HorizontalConsecutive(type, i, j+1);
+    return 1 + VerticalConsecutive(type, i+1, j);
   else
     return 0;
 }
