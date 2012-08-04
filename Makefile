@@ -4,7 +4,7 @@ LIB = -lallegro_ttf -lallegro_font -lallegro_primitives -lallegro \
 
 EXEC = main
 
-OBJS = gameclass_draw.o gameclass.o main.o
+OBJS = gameclass_update.o gameclass_draw.o gameclass.o main.o
 
 all: $(OBJS)
 	g++ -o $(EXEC) $(OBJS) $(LIB) $(CXXFLAGS)

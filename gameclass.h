@@ -20,6 +20,13 @@ class GameClass {
   private:
     int AllegroInitialization ();
 
+    void Update ();
+    void Verify (size_t, size_t);
+    size_t HorizontalConsecutive (int, size_t, size_t) const;
+    size_t VerticalConsecutive (int, size_t, size_t) const;
+    void RemoveH (size_t, size_t, size_t);
+    void RemoveV (size_t, size_t, size_t);
+
     void DrawGame () const;
     void DrawBall (int, float, float) const;
 
@@ -38,7 +45,7 @@ class GameClass {
     ALLEGRO_BITMAP *level;
     ALLEGRO_AUDIO_STREAM *music;
     
-    bool done;
+    bool done, blocked;
 
     bool hasFailed;
     int errorValue;

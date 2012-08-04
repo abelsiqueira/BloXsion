@@ -119,6 +119,7 @@ void GameClass::Run () {
           done = true;
           break;
         default:
+          Update();
           break;
       }
     }

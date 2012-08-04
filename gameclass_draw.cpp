@@ -31,6 +31,9 @@ void GameClass::DrawBall (int b, float x, float y) const {
     case 5:
       color = al_map_rgb(0,50,50);
       break;
+    default:
+      return;
+      break;
   }
 
   static float count = 0;
