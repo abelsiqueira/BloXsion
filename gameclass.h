@@ -21,6 +21,11 @@ class GameClass {
     int AllegroInitialization ();
 
     void DrawGame () const;
+    void DrawBall (int, float, float) const;
+
+    // Game
+    int **grid;
+    size_t gridWidth, gridHeight;
 
     // Allegro
     ALLEGRO_DISPLAY *display;

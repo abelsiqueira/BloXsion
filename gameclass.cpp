@@ -20,6 +20,16 @@ GameClass::GameClass () {
     return;
   }
 
+  gridWidth = cWindowWidth/cTileSize;
+  gridHeight = cWindowHeight/cTileSize;
+  grid = new int*[gridHeight];
+  for (size_t i = 0; i < gridHeight; i++) {
+    grid[i] = new int[gridWidth];
+    for (size_t j = 0; j < gridWidth; j++) {
+      grid[i][j] = rand()%cMaxBalls;
+    }
+  }
+
 }
 
 int GameClass::AllegroInitialization () {
@@ -72,6 +82,10 @@ int GameClass::AllegroInitialization () {
 }
 
 GameClass::~GameClass () {
+  for (size_t i = 0; i < gridHeight; i++)
+    delete []grid[i];
+  delete []grid;
+
   al_destroy_font(bigFont);
   al_destroy_font(normalFont);
   al_destroy_font(smallFont);
