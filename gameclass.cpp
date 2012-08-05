@@ -1,4 +1,5 @@
 #include "gameclass.h"
+#include <cmath>
 #include <algorithm>
 
 GameClass::GameClass () {
@@ -39,6 +40,8 @@ GameClass::GameClass () {
   next = new int[gridWidth];
   for (size_t j = 0; j < gridWidth; j++)
     next[j] = rand()%cMaxObjects;
+
+  firstChosen = false;
 
 }
 
@@ -124,8 +127,31 @@ void GameClass::Run () {
       done = true;
     } else if (ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
                ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
-    } else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-
+    } else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+      if (!locked) {
+        int i = ev.mouse.y/cTileSize, j = ev.mouse.x/cTileSize;
+        std::cout << i << "," << j << std::endl;
+        if (firstChosen) {
+          std::cout << fabs(i - (int)iFirst) + fabs(j - (int)jFirst) << std::endl;
+          if ( fabs(i - (int)iFirst) + fabs(j - (int)jFirst) != 1) {
+            firstChosen = false;
+          } else {
+            iSecond = i;
+            jSecond = j;
+            firstChosen = false;
+            int aux = grid[iFirst][jFirst];
+            grid[iFirst][jFirst] = grid[iSecond][jSecond];
+            grid[iSecond][jSecond] = aux;
+//            Swap(iFirst, jFirst, iSecond, jSecond);
+          }
+        } else {
+          iFirst = i;
+          jFirst = j;
+          firstChosen = true;
+        }
+      } else {
+        std::cout << "locked" << std::endl;
+      }
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       switch (ev.keyboard.keycode) {
         case ALLEGRO_KEY_ESCAPE:

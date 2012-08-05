@@ -26,6 +26,12 @@ void GameClass::DrawGame () const {
     if (fall)
       DrawObject(fall, next[j], j*cTileSize, -cTileSize);
   }
+
+  if (firstChosen) {
+    float x = jFirst*cTileSize, y = iFirst*cTileSize,
+          xf = x + cTileSize, yf = y + cTileSize;
+    al_draw_rectangle(x, y, xf, yf, al_map_rgb(255,255,255), 2);
+  }
 }
 
 void GameClass::DrawObject (bool fall, int b, float x, float y) const {

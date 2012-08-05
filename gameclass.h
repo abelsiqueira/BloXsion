@@ -35,6 +35,8 @@ class GameClass {
     // Game
     int **grid, **gridNew, *next;
     size_t gridWidth, gridHeight;
+    bool firstChosen;
+    size_t iFirst, jFirst, iSecond, jSecond;
 
     // Allegro
     ALLEGRO_DISPLAY *display;
