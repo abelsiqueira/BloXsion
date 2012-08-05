@@ -33,7 +33,7 @@ class GameClass {
     void DrawBall (bool, int, float, float) const;
 
     // Game
-    int **grid, **gridNew;
+    int **grid, **gridNew, *next;
     size_t gridWidth, gridHeight;
 
     // Allegro

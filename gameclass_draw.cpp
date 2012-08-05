@@ -2,8 +2,8 @@
 #include <cmath>
 
 void GameClass::DrawGame () const {
-  for (size_t i = 0; i < gridHeight; i++) {
-    for (size_t j = 0; j < gridWidth; j++) {
+  for (size_t j = 0; j < gridWidth; j++) {
+    for (size_t i = 0; i < gridHeight; i++) {
       int type = grid[i][j];
       if (type != -1) {
         bool fall = false;
@@ -16,6 +16,15 @@ void GameClass::DrawGame () const {
         DrawBall(fall, type, j*cTileSize, i*cTileSize);
       }
     }
+    bool fall = false;
+    for (size_t k = 0; k < gridHeight; k++) {
+      if (grid[k][j] == -1) {
+        fall = true;
+        break;
+      }
+    }
+    if (fall)
+      DrawBall(fall, next[j], j*cTileSize, -cTileSize);
   }
 }
 

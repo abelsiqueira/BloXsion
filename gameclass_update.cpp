@@ -33,6 +33,8 @@ void GameClass::Fall () {
         if (grid[i][j] == -1) {
           locked = true;
           falling = cTileSize;
+          for (size_t k = 0; k < gridWidth; k++)
+            next[k] = rand()%cMaxBalls;
           break;
         }
       }
@@ -43,7 +45,7 @@ void GameClass::Fall () {
 
 void GameClass::Down (size_t i, size_t j) {
   if (i == 0) {
-    gridNew[i][j] = rand()%cMaxBalls;
+    gridNew[i][j] = next[j];
     return;
   }
   gridNew[i][j] = grid[i-1][j];
@@ -73,10 +75,11 @@ void GameClass::Verify (size_t i, size_t j) {
   }
 
   if (locked) {
-    for (size_t i = 0; i < gridHeight; i++) {
-      for (size_t j = 0; j < gridWidth; j++) {
+    for (size_t j = 0; j < gridWidth; j++) {
+      for (size_t i = 0; i < gridHeight; i++) {
         gridNew[i][j] = grid[i][j];
       }
+      next[j] = rand()%cMaxBalls;
     }
   }
 }

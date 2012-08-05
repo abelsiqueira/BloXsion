@@ -35,6 +35,9 @@ GameClass::GameClass () {
       gridNew[i][j] = grid[i][j];
     }
   }
+  next = new int[gridWidth];
+  for (size_t j = 0; j < gridWidth; j++)
+    next[j] = rand()%cMaxBalls;
 
 }
 
