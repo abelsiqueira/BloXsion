@@ -139,18 +139,7 @@ void GameClass::DrawObject (bool fall, int b, float x, float y) const {
 }
 
 void GameClass::DrawObject (float x, float y, ALLEGRO_COLOR color) const {
-  float xf = x + tileSize, yf = y + tileSize, 
-        d1 = 2*tileSize/100.0, d2 = 5*tileSize/100.0, d3 = 15*tileSize/100.0;
-
-  al_draw_filled_rectangle(x + d1, y + d1, xf - d1, yf - d1, color);
-  color.r *= 2;
-  color.g *= 2;
-  color.b *= 2;
-  al_draw_filled_rectangle(x + d2, y + d2, xf - d2, yf - d2, color);
-  color.r *= 2;
-  color.g *= 2;
-  color.b *= 2;
-  al_draw_filled_rectangle(x + d3, y + d3, xf - d3, yf - d3, color);
+  DrawObject(x, y, 1, color);
 }
 
 void GameClass::DrawObject (float x, float y, float s, ALLEGRO_COLOR color) const {
@@ -171,4 +160,41 @@ void GameClass::DrawObject (float x, float y, float s, ALLEGRO_COLOR color) cons
   color.g *= 2;
   color.b *= 2;
   al_draw_filled_rectangle(x + d3, y + d3, xf - d3, yf - d3, color);
+
+#ifdef TRUE_COLORS
+  ALLEGRO_COLOR lineColor = color;
+
+  float porc = drawCount/((float)tileSize);
+  lineColor.r *= 4*porc*(1-porc);
+  lineColor.g *= 4*porc*(1-porc);
+  lineColor.b *= 4*porc*(1-porc);
+
+  DrawLines(x, y, porc, lineColor);
+  porc = (drawCount + tileSize/4)%tileSize/((float)tileSize);
+  DrawLines(x, y, porc, lineColor);
+  porc = (drawCount + 2*tileSize/4)%tileSize/((float)tileSize);
+  DrawLines(x, y, porc, lineColor);
+  porc = (drawCount + 3*tileSize/4)%tileSize/((float)tileSize);
+  DrawLines(x, y, porc, lineColor);
+#endif
+}
+
+void GameClass::DrawLines (float x, float y, float p, ALLEGRO_COLOR lineColor) const {
+
+  float xf = x + tileSize, yf = y + tileSize,
+        xt = p*x + (1-p)*xf,
+        xb = p*xf + (1-p)*x,
+        yl = p*yf + (1-p)*y,
+        yr = p*y + (1-p)*yf;
+
+
+  al_draw_line(x, yl, xt, y, lineColor, 2);
+  al_draw_line(xt, y, xf, yr, lineColor, 2);
+  al_draw_line(xf, yr, xb, yf, lineColor, 2);
+  al_draw_line(xb, yf, x, yl, lineColor, 2);
+
+  al_draw_line(x, yl, xt, y, lineColor, 2);
+  al_draw_line(xt, y, xf, yr, lineColor, 2);
+  al_draw_line(xf, yr, xb, yf, lineColor, 2);
+  al_draw_line(xb, yf, x, yl, lineColor, 2);
 }

@@ -32,6 +32,7 @@ class GameClass {
     ALLEGRO_COLOR GetColor(int) const;
     void DrawGame () const;
     void DrawHud () const;
+    void DrawLines (float, float, float, ALLEGRO_COLOR) const;
     void DrawObject (bool, int, float, float) const;
     void DrawObject (float, float, ALLEGRO_COLOR) const;
     void DrawObject (float, float, float, ALLEGRO_COLOR) const;
@@ -47,6 +48,7 @@ class GameClass {
     int timeLeft;
     int score, numberKilled;
     int numberOfObjects;
+    int drawCount;
 
     // Allegro
     ALLEGRO_DISPLAY *display;

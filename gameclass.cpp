@@ -6,6 +6,7 @@ GameClass::GameClass () {
   srand(time(0));
   al_init();
 
+  drawCount = 0;
   grid = 0;
   gridNew = 0;
   hugeFont = 0;

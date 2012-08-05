@@ -2,6 +2,9 @@
 
 void GameClass::Update () {
   timeLeft--;
+  drawCount += 1;
+  if (drawCount >= tileSize)
+    drawCount = 0;
   if (numberKilled > (numberOfObjects - cInitialObjects + 1)*cDifficulty) {
     numberOfObjects++;
     if (numberOfObjects > cMaxObjects)
