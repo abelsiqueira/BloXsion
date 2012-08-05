@@ -29,14 +29,19 @@ class GameClass {
     void Fall ();
     void Down (size_t, size_t);
 
+    ALLEGRO_COLOR GetColor(int) const;
     void DrawGame () const;
     void DrawObject (bool, int, float, float) const;
+    void DrawObject (float, float, ALLEGRO_COLOR) const;
 
     // Game
     int **grid, **gridNew, *next;
     size_t gridWidth, gridHeight;
     bool firstChosen;
     size_t iFirst, jFirst, iSecond, jSecond;
+    int redDiff, greenDiff, blueDiff;
+    int swapCount;
+    bool swapping;
 
     // Allegro
     ALLEGRO_DISPLAY *display;

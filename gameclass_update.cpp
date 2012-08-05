@@ -1,19 +1,30 @@
 #include "gameclass.h"
 
 void GameClass::Update () {
-  if (!locked) {
-    for (size_t i = 0; i < gridHeight; i++) {
-      for (size_t j = 0; j < gridWidth; j++) {
-        Verify(i, j);
+  if (!swapping) {
+    if (!locked) {
+      for (size_t i = 0; i < gridHeight; i++) {
+        for (size_t j = 0; j < gridWidth; j++) {
+          Verify(i, j);
+        }
       }
+    } else {
+      Fall();
     }
   } else {
-    Fall();
+    swapCount += cSwapSpeed;
+    if (swapCount > 255) {
+      locked = false;
+      swapping = false;
+      int aux = grid[iFirst][jFirst];
+      grid[iFirst][jFirst] = grid[iSecond][jSecond];
+      grid[iSecond][jSecond] = aux;
+    }
   }
 }
 
 void GameClass::Fall () {
-  falling -= fallingSpeed;
+  falling -= cFallingSpeed;
   if (falling <= 0) {
     falling = 0;
     locked = false;

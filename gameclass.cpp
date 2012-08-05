@@ -42,6 +42,8 @@ GameClass::GameClass () {
     next[j] = rand()%cMaxObjects;
 
   firstChosen = false;
+  swapCount = 0;
+  swapping = false;
 
 }
 
@@ -130,19 +132,21 @@ void GameClass::Run () {
     } else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
       if (!locked) {
         int i = ev.mouse.y/cTileSize, j = ev.mouse.x/cTileSize;
-        std::cout << i << "," << j << std::endl;
         if (firstChosen) {
-          std::cout << fabs(i - (int)iFirst) + fabs(j - (int)jFirst) << std::endl;
           if ( fabs(i - (int)iFirst) + fabs(j - (int)jFirst) != 1) {
             firstChosen = false;
           } else {
             iSecond = i;
             jSecond = j;
             firstChosen = false;
-            int aux = grid[iFirst][jFirst];
-            grid[iFirst][jFirst] = grid[iSecond][jSecond];
-            grid[iSecond][jSecond] = aux;
-//            Swap(iFirst, jFirst, iSecond, jSecond);
+            locked = true;
+            swapCount = 0;
+            swapping = true;
+            ALLEGRO_COLOR color1 = GetColor(grid[iFirst][jFirst]),
+                          color2 = GetColor(grid[iSecond][jSecond]);
+            redDiff   = (color1.r - color2.r)*255/cColorIntensity;
+            greenDiff = (color1.g - color2.g)*255/cColorIntensity;
+            blueDiff  = (color1.b - color2.b)*255/cColorIntensity;
           }
         } else {
           iFirst = i;

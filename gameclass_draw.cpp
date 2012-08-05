@@ -32,40 +32,76 @@ void GameClass::DrawGame () const {
           xf = x + cTileSize, yf = y + cTileSize;
     al_draw_rectangle(x, y, xf, yf, al_map_rgb(255,255,255), 2);
   }
+  
+  if (swapping) {
+    float xFirst  =  jFirst*cTileSize, yFirst  =  iFirst*cTileSize,
+          xSecond = jSecond*cTileSize, ySecond = iSecond*cTileSize;
+
+    ALLEGRO_COLOR colorFirst = GetColor(grid[iFirst][jFirst]),
+                  colorSecond = GetColor(grid[iSecond][jSecond]);
+
+    colorFirst.r -= (redDiff*swapCount*cColorIntensity)/(255.0*255.0);
+    colorFirst.g -= (greenDiff*swapCount*cColorIntensity)/(255.0*255.0);
+    colorFirst.b -= (blueDiff*swapCount*cColorIntensity)/(255.0*255.0);
+    colorSecond.r += (redDiff*swapCount*cColorIntensity)/(255.0*255.0);
+    colorSecond.g += (greenDiff*swapCount*cColorIntensity)/(255.0*255.0);
+    colorSecond.b += (blueDiff*swapCount*cColorIntensity)/(255.0*255.0);
+
+/*     std::cout << "First: ";
+ *     std::cout << colorFirst.r << ','
+ *               << colorFirst.g << ','
+ *               << colorFirst.b << std::endl;
+ *     std::cout << "Second: ";
+ *     std::cout << colorSecond.r << ','
+ *               << colorSecond.g << ','
+ *               << colorSecond.b << std::endl;
+ */
+
+
+    DrawObject(xFirst, yFirst, colorFirst);
+    DrawObject(xSecond, ySecond, colorSecond);
+  }
 }
 
-void GameClass::DrawObject (bool fall, int b, float x, float y) const {
+ALLEGRO_COLOR GameClass::GetColor (int b) const {
   ALLEGRO_COLOR color;
-
-  int intensity = 48;
 
   switch (b) {
     case 0:
-      color = al_map_rgb(intensity,0,0);
+      color = al_map_rgb(cColorIntensity,0,0);
       break;
     case 1:
-      color = al_map_rgb(0,intensity,0);
+      color = al_map_rgb(0,cColorIntensity,0);
       break;
     case 2:
-      color = al_map_rgb(0,0,intensity);
+      color = al_map_rgb(0,0,cColorIntensity);
       break;
     case 3:
-      color = al_map_rgb(intensity,intensity,0);
+      color = al_map_rgb(cColorIntensity,cColorIntensity,0);
       break;
     case 4:
-      color = al_map_rgb(intensity,0,intensity);
+      color = al_map_rgb(cColorIntensity,0,cColorIntensity);
       break;
     case 5:
-      color = al_map_rgb(0,intensity,intensity);
+      color = al_map_rgb(0,cColorIntensity,cColorIntensity);
       break;
     default:
-      return;
+      return color;
       break;
   }
+  return color;
+}
+
+void GameClass::DrawObject (bool fall, int b, float x, float y) const {
+  ALLEGRO_COLOR color = GetColor(b);
 
   if (fall)
     y += cTileSize - falling;
-  float xf = x + cTileSize, yf = y + cTileSize,
+  DrawObject(x, y, color);
+}
+
+void GameClass::DrawObject (float x, float y, ALLEGRO_COLOR color) const {
+  float xf = x + cTileSize, yf = y + cTileSize, 
         d1 = 2, d2 = 5, d3 = 15;
 
   al_draw_filled_rectangle(x + d1, y + d1, xf - d1, yf - d1, color);
