@@ -5,6 +5,10 @@
 GameClass::GameClass () {
   srand(time(0));
 
+  gridHeight = cWindowHeight/cTileSize;
+  gridWidth = gridHeight;
+  hudWidth = cWindowWidth - cWindowHeight;
+
   errorValue = (AllegroInitialization() == 0 ? false : true);
   if (errorValue == 0) {
     hasFailed = false;
@@ -22,10 +26,14 @@ GameClass::GameClass () {
   }
   
   locked = false;
-
-  gridHeight = cWindowHeight/cTileSize;
-  gridWidth = gridHeight;
-  hudWidth = cWindowWidth - cWindowHeight;
+  firstChosen = false;
+  swapCount = 0;
+  swapping = false;
+  lives = 1;
+  justMoved = false;
+  score = 0;
+  numberKilled = 0;
+  numberOfObjects = cInitialObjects;
 
   grid = new int*[gridHeight];
   gridNew = new int*[gridHeight];
@@ -39,14 +47,7 @@ GameClass::GameClass () {
   }
   next = new int[gridWidth];
   for (size_t j = 0; j < gridWidth; j++)
-    next[j] = rand()%cMaxObjects;
-
-  firstChosen = false;
-  swapCount = 0;
-  swapping = false;
-  lives = 1;
-  justMoved = false;
-
+    next[j] = rand()%numberOfObjects;
 }
 
 int GameClass::AllegroInitialization () {
@@ -78,10 +79,12 @@ int GameClass::AllegroInitialization () {
   al_register_event_source(eventQueue, al_get_keyboard_event_source());
   al_register_event_source(eventQueue, al_get_mouse_event_source());
 
-  hugeFont = al_load_font("DejaVuSans.ttf", 80, 0);
-  bigFont = al_load_font("DejaVuSans.ttf", 40, 0);
-  normalFont = al_load_font("DejaVuSans.ttf", 20, 0);
-  smallFont = al_load_font("DejaVuSans.ttf", 10, 0);
+  int minSize = hudWidth/25;
+
+  hugeFont = al_load_font("DejaVuSans.ttf", 8*minSize, 0);
+  bigFont = al_load_font("DejaVuSans.ttf", 4*minSize, 0);
+  normalFont = al_load_font("DejaVuSans.ttf", 2*minSize, 0);
+  smallFont = al_load_font("DejaVuSans.ttf", minSize, 0);
 
   if (!hugeFont || !bigFont || !normalFont || !smallFont)
     return 2;

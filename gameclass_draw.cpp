@@ -75,6 +75,20 @@ void GameClass::DrawHud() const {
   aux << lives;
   al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 100, 
       ALLEGRO_ALIGN_CENTRE, aux.str().c_str());
+
+  std::stringstream aux2;
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 200,
+      ALLEGRO_ALIGN_CENTRE, "Pontos:");
+  aux2 << score;
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 250,
+      ALLEGRO_ALIGN_CENTRE, aux2.str().c_str());
+
+  std::stringstream aux3;
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 350,
+      ALLEGRO_ALIGN_CENTRE, "Objetos:");
+  aux3 << numberOfObjects;
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 400,
+      ALLEGRO_ALIGN_CENTRE, aux3.str().c_str());
 }
 
 ALLEGRO_COLOR GameClass::GetColor (int b) const {

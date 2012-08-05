@@ -45,6 +45,8 @@ class GameClass {
     int swapCount;
     bool swapping, justMoved;
     int lives;
+    int score, numberKilled;
+    int numberOfObjects;
 
     // Allegro
     ALLEGRO_DISPLAY *display;

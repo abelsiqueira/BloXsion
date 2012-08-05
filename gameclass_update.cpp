@@ -1,6 +1,11 @@
 #include "gameclass.h"
 
 void GameClass::Update () {
+  if (numberKilled > (numberOfObjects - cInitialObjects + 1)*cDifficulty) {
+    numberOfObjects++;
+    if (numberOfObjects > cMaxObjects)
+      numberOfObjects = cMaxObjects;
+  }
   if (!swapping) {
     bool killed = false;
     if (!locked) {
@@ -51,7 +56,7 @@ void GameClass::Fall () {
           locked = true;
           falling = cTileSize;
           for (size_t k = 0; k < gridWidth; k++)
-            next[k] = rand()%cMaxObjects;
+            next[k] = rand()%numberOfObjects;
           break;
         }
       }
@@ -85,12 +90,16 @@ bool GameClass::Verify (size_t i, size_t j) {
       RemoveH(i, j, nh);
       locked = true;
       falling = cTileSize;
+      score += cScoreReward[nh];
+      numberKilled++;
       if (nh > 3)
         lives++;
     } else if (vert) {
       RemoveV(i, j, nv);
       locked = true;
       falling = cTileSize;
+      score += cScoreReward[nv];
+      numberKilled++;
       if (nv > 3)
         lives++;
     }
@@ -101,7 +110,7 @@ bool GameClass::Verify (size_t i, size_t j) {
       for (size_t i = 0; i < gridHeight; i++) {
         gridNew[i][j] = grid[i][j];
       }
-      next[j] = rand()%cMaxObjects;
+      next[j] = rand()%numberOfObjects;
     }
     killed = true;
   }
