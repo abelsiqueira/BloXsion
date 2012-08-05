@@ -54,7 +54,7 @@ GameClass::GameClass () {
   firstChosen = false;
   swapCount = 0;
   swapping = false;
-  lives = 3;
+  timeLeft = cStartingTime;
   justMoved = false;
   score = 0;
   numberKilled = 0;
@@ -165,7 +165,7 @@ void GameClass::Run () {
 
     if (ev.type == ALLEGRO_EVENT_TIMER) {
       Update();
-      if (lives <= 0)
+      if (timeLeft <= 0)
         done = true;
       redraw = true;
     } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {

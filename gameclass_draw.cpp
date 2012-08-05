@@ -78,9 +78,14 @@ void GameClass::DrawHud() const {
   al_draw_filled_rounded_rectangle(x, y+2*ydiv+d1, xf, y+3*ydiv-d1, 10, 10, al_map_rgb(0,0,0));
 
   al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 3*d1, 
-      ALLEGRO_ALIGN_CENTRE, "Vidas:");
+      ALLEGRO_ALIGN_CENTRE, "Tempo:");
   std::stringstream aux;
-  aux << lives;
+
+  aux.width(4);
+  aux.fill('0');
+  aux.precision(1);
+  aux.setf(std::ios::fixed,std::ios::floatfield);
+  aux << (float)timeLeft/cFps;
   al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 3*d1 + ydiv/2, 
       ALLEGRO_ALIGN_CENTRE, aux.str().c_str());
 

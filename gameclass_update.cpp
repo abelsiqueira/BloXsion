@@ -1,6 +1,7 @@
 #include "gameclass.h"
 
 void GameClass::Update () {
+  timeLeft--;
   if (numberKilled > (numberOfObjects - cInitialObjects + 1)*cDifficulty) {
     numberOfObjects++;
     if (numberOfObjects > cMaxObjects)
@@ -17,9 +18,6 @@ void GameClass::Update () {
       }
     } else {
       Fall();
-    }
-    if (justMoved && !killed) {
-      lives--;
     }
     justMoved = false;
   } else {
@@ -91,17 +89,15 @@ bool GameClass::Verify (size_t i, size_t j) {
       locked = true;
       falling = tileSize;
       score += cScoreReward[nh];
+      timeLeft += cTimeReward[nh];
       numberKilled++;
-      if (nh > 3)
-        lives++;
     } else if (vert) {
       RemoveV(i, j, nv);
       locked = true;
       falling = tileSize;
       score += cScoreReward[nv];
+      timeLeft += cTimeReward[nv];
       numberKilled++;
-      if (nv > 3)
-        lives++;
     }
   }
 

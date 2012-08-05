@@ -44,7 +44,7 @@ class GameClass {
     int redDiff, greenDiff, blueDiff;
     int swapCount;
     bool swapping, justMoved;
-    int lives;
+    int timeLeft;
     int score, numberKilled;
     int numberOfObjects;
 
