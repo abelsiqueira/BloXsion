@@ -54,7 +54,7 @@ void GameClass::Fall () {
       for (size_t j = 0; j < gridWidth; j++) {
         if (grid[i][j] == -1) {
           locked = true;
-          falling = cTileSize;
+          falling = tileSize;
           for (size_t k = 0; k < gridWidth; k++)
             next[k] = rand()%numberOfObjects;
           break;
@@ -78,7 +78,7 @@ bool GameClass::Verify (size_t i, size_t j) {
   bool killed = false;
   if (grid[i][j] == -1) {
     locked = true;
-    falling = cTileSize;
+    falling = tileSize;
   } else {
     size_t nh = HorizontalConsecutive(grid[i][j], i, j),
         nv = VerticalConsecutive(grid[i][j], i, j);
@@ -89,7 +89,7 @@ bool GameClass::Verify (size_t i, size_t j) {
     if (horz) {
       RemoveH(i, j, nh);
       locked = true;
-      falling = cTileSize;
+      falling = tileSize;
       score += cScoreReward[nh];
       numberKilled++;
       if (nh > 3)
@@ -97,7 +97,7 @@ bool GameClass::Verify (size_t i, size_t j) {
     } else if (vert) {
       RemoveV(i, j, nv);
       locked = true;
-      falling = cTileSize;
+      falling = tileSize;
       score += cScoreReward[nv];
       numberKilled++;
       if (nv > 3)

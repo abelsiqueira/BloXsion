@@ -58,6 +58,8 @@ class GameClass {
     ALLEGRO_FONT *hugeFont;
     ALLEGRO_BITMAP *level;
     ALLEGRO_AUDIO_STREAM *music;
+
+    int windowWidth, windowHeight, tileSize;
     
     bool done, locked;
 

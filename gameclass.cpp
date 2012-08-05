@@ -4,12 +4,31 @@
 
 GameClass::GameClass () {
   srand(time(0));
+  al_init();
 
-  gridHeight = cWindowHeight/cTileSize;
+  grid = 0;
+  gridNew = 0;
+  hugeFont = 0;
+  bigFont = 0;
+  normalFont = 0;
+  smallFont = 0;
+  timer = 0;
+  eventQueue = 0;
+  display = 0;
+
+  al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+
+  display = al_create_display(100, 100);
+  windowHeight = al_get_display_height(display);
+  windowWidth = al_get_display_width(display);
+
+  gridHeight = 10;
   gridWidth = gridHeight;
-  hudWidth = cWindowWidth - cWindowHeight;
+  tileSize = windowHeight/gridHeight;
+  hudWidth = windowWidth - windowHeight;
 
-  errorValue = (AllegroInitialization() == 0 ? false : true);
+  errorValue = AllegroInitialization();
+
   if (errorValue == 0) {
     hasFailed = false;
   } else {
@@ -17,6 +36,12 @@ GameClass::GameClass () {
     switch (errorValue) {
       case 1:
         std::cout << "Allegro error. Something failed to initialize" << std::endl;
+        break;
+      case 2:
+        std::cout << "Font failed" << std::endl;
+        break;
+      case 4:
+        std::cout << "Music failed" << std::endl;
         break;
       default:
         std::cout << "Unidentified error." << std::endl;
@@ -52,8 +77,8 @@ GameClass::GameClass () {
 }
 
 int GameClass::AllegroInitialization () {
-  al_init();
-  display = al_create_display(cWindowWidth, cWindowHeight);
+  if (!display)
+    display = al_create_display(windowWidth, windowHeight);
   if (!display) 
     return 1;
   al_set_window_title(display, "test");
@@ -90,32 +115,42 @@ int GameClass::AllegroInitialization () {
   if (!hugeFont || !bigFont || !normalFont || !smallFont)
     return 2;
   
-/*   music = al_load_audio_stream("Music/background.ogg", 4, 1024);
- *   if (!music)
- *     return 4;
- *   al_attach_audio_stream_to_mixer(music, al_get_default_mixer());
- *   al_set_audio_stream_gain(music, 0.5);
- *   al_set_audio_stream_playing(music, true);
- *   al_set_audio_stream_playmode(music, ALLEGRO_PLAYMODE_LOOP);
- */
+  music = al_load_audio_stream("Music/fearless_by_pill.ogg", 4, 1024);
+  if (!music)
+    return 4;
+  al_attach_audio_stream_to_mixer(music, al_get_default_mixer());
+  al_set_audio_stream_gain(music, 0.5);
+  al_set_audio_stream_playing(music, true);
+  al_set_audio_stream_playmode(music, ALLEGRO_PLAYMODE_LOOP);
+
 
   return 0;
 }
 
 GameClass::~GameClass () {
-  for (size_t i = 0; i < gridHeight; i++) {
-    delete []grid[i];
-    delete []gridNew[i];
+  if (grid) {
+    for (size_t i = 0; i < gridHeight; i++) {
+      delete []grid[i];
+      if (gridNew)
+        delete []gridNew[i];
+    }
+    delete []grid;
+    if (gridNew)
+      delete []gridNew;
   }
-  delete []grid;
-  delete []gridNew;
 
-  al_destroy_font(bigFont);
-  al_destroy_font(normalFont);
-  al_destroy_font(smallFont);
-  al_destroy_timer(timer);
-  al_destroy_event_queue(eventQueue);
-  al_destroy_display(display);
+  if (hugeFont) {
+    al_destroy_font(hugeFont);
+    al_destroy_font(bigFont);
+    al_destroy_font(normalFont);
+    al_destroy_font(smallFont);
+  }
+  if (timer)
+    al_destroy_timer(timer);
+  if (eventQueue)
+    al_destroy_event_queue(eventQueue);
+  if (display)
+    al_destroy_display(display);
 }
 
 void GameClass::Run () {
@@ -139,7 +174,7 @@ void GameClass::Run () {
                ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
     } else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
       if (!locked) {
-        int i = ev.mouse.y/cTileSize, j = ev.mouse.x/cTileSize;
+        int i = ev.mouse.y/tileSize, j = ev.mouse.x/tileSize;
         if (firstChosen) {
           if ( fabs(i - (int)iFirst) + fabs(j - (int)jFirst) != 1) {
             firstChosen = false;
