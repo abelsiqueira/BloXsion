@@ -23,8 +23,9 @@ GameClass::GameClass () {
   
   locked = false;
 
-  gridWidth = cWindowWidth/cTileSize;
   gridHeight = cWindowHeight/cTileSize;
+  gridWidth = gridHeight;
+  hudWidth = cWindowWidth - cWindowHeight;
 
   grid = new int*[gridHeight];
   gridNew = new int*[gridHeight];
@@ -32,7 +33,6 @@ GameClass::GameClass () {
     grid[i] = new int[gridWidth];
     gridNew[i] = new int[gridWidth];
     for (size_t j = 0; j < gridWidth; j++) {
-//      grid[i][j] = rand()%cMaxObjects;
       grid[i][j] = -1;
       gridNew[i][j] = grid[i][j];
     }
@@ -44,6 +44,8 @@ GameClass::GameClass () {
   firstChosen = false;
   swapCount = 0;
   swapping = false;
+  lives = 1;
+  justMoved = false;
 
 }
 
@@ -124,6 +126,8 @@ void GameClass::Run () {
 
     if (ev.type == ALLEGRO_EVENT_TIMER) {
       Update();
+      if (lives <= 0)
+        done = true;
       redraw = true;
     } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       done = true;
@@ -147,6 +151,7 @@ void GameClass::Run () {
             redDiff   = (color1.r - color2.r)*255/cColorIntensity;
             greenDiff = (color1.g - color2.g)*255/cColorIntensity;
             blueDiff  = (color1.b - color2.b)*255/cColorIntensity;
+            justMoved = true;
           }
         } else {
           iFirst = i;
@@ -154,7 +159,6 @@ void GameClass::Run () {
           firstChosen = true;
         }
       } else {
-        std::cout << "locked" << std::endl;
       }
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       switch (ev.keyboard.keycode) {

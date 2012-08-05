@@ -47,20 +47,34 @@ void GameClass::DrawGame () const {
     colorSecond.g += (greenDiff*swapCount*cColorIntensity)/(255.0*255.0);
     colorSecond.b += (blueDiff*swapCount*cColorIntensity)/(255.0*255.0);
 
-/*     std::cout << "First: ";
- *     std::cout << colorFirst.r << ','
- *               << colorFirst.g << ','
- *               << colorFirst.b << std::endl;
- *     std::cout << "Second: ";
- *     std::cout << colorSecond.r << ','
- *               << colorSecond.g << ','
- *               << colorSecond.b << std::endl;
- */
 
-
-    DrawObject(xFirst, yFirst, colorFirst);
-    DrawObject(xSecond, ySecond, colorSecond);
+    float s = fabs(255 - 2*swapCount)/255.0;
+    al_draw_filled_rectangle(xFirst, yFirst, xFirst + cTileSize, yFirst + cTileSize,
+        al_map_rgb(0,0,0));
+    al_draw_filled_rectangle(xSecond, ySecond, xSecond + cTileSize, ySecond + cTileSize,
+        al_map_rgb(0,0,0));
+    DrawObject(xFirst, yFirst, s, colorFirst);
+    DrawObject(xSecond, ySecond, s, colorSecond);
   }
+
+  DrawHud();
+}
+
+void GameClass::DrawHud() const {
+  float x = cWindowWidth - hudWidth, y = 0,
+         xf = cWindowWidth, yf = cWindowHeight;
+  float d1 = 5;
+
+  al_draw_filled_rectangle(x, y, xf, yf, al_map_rgb(250,250,25));
+  x += d1; y += d1; xf -= d1; yf -= d1;
+  al_draw_filled_rounded_rectangle(x, y, xf, yf, 50, 50, al_map_rgb(0,10,50));
+
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 50, 
+      ALLEGRO_ALIGN_CENTRE, "Vidas:");
+  std::stringstream aux;
+  aux << lives;
+  al_draw_text(bigFont, al_map_rgb(250,250,0), (x + xf)/2, y + 100, 
+      ALLEGRO_ALIGN_CENTRE, aux.str().c_str());
 }
 
 ALLEGRO_COLOR GameClass::GetColor (int b) const {
@@ -102,7 +116,27 @@ void GameClass::DrawObject (bool fall, int b, float x, float y) const {
 
 void GameClass::DrawObject (float x, float y, ALLEGRO_COLOR color) const {
   float xf = x + cTileSize, yf = y + cTileSize, 
-        d1 = 2, d2 = 5, d3 = 15;
+        d1 = 2*cTileSize/100.0, d2 = 5*cTileSize/100.0, d3 = 15*cTileSize/100.0;
+
+  al_draw_filled_rectangle(x + d1, y + d1, xf - d1, yf - d1, color);
+  color.r *= 2;
+  color.g *= 2;
+  color.b *= 2;
+  al_draw_filled_rectangle(x + d2, y + d2, xf - d2, yf - d2, color);
+  color.r *= 2;
+  color.g *= 2;
+  color.b *= 2;
+  al_draw_filled_rectangle(x + d3, y + d3, xf - d3, yf - d3, color);
+}
+
+void GameClass::DrawObject (float x, float y, float s, ALLEGRO_COLOR color) const {
+  if (s < 0 || s > 1) s = 1.0;
+  float e = 30*(1 - s);
+  float xf = x + cTileSize, yf = y + cTileSize, 
+        d1 = 2+e, d2 = 5+e, d3 = 15+e;
+  d1 *= cTileSize/100.0;
+  d2 *= cTileSize/100.0;
+  d3 *= cTileSize/100.0;
 
   al_draw_filled_rectangle(x + d1, y + d1, xf - d1, yf - d1, color);
   color.r *= 2;

@@ -2,15 +2,21 @@
 
 void GameClass::Update () {
   if (!swapping) {
+    bool killed = false;
     if (!locked) {
       for (size_t i = 0; i < gridHeight; i++) {
         for (size_t j = 0; j < gridWidth; j++) {
-          Verify(i, j);
+          if (Verify(i, j))
+            killed = true;
         }
       }
     } else {
       Fall();
     }
+    if (justMoved && !killed) {
+      lives--;
+    }
+    justMoved = false;
   } else {
     swapCount += cSwapSpeed;
     if (swapCount > 255) {
@@ -63,7 +69,8 @@ void GameClass::Down (size_t i, size_t j) {
   Down(i-1, j);
 }
 
-void GameClass::Verify (size_t i, size_t j) {
+bool GameClass::Verify (size_t i, size_t j) {
+  bool killed = false;
   if (grid[i][j] == -1) {
     locked = true;
     falling = cTileSize;
@@ -78,10 +85,14 @@ void GameClass::Verify (size_t i, size_t j) {
       RemoveH(i, j, nh);
       locked = true;
       falling = cTileSize;
+      if (nh > 3)
+        lives++;
     } else if (vert) {
       RemoveV(i, j, nv);
       locked = true;
       falling = cTileSize;
+      if (nv > 3)
+        lives++;
     }
   }
 
@@ -92,7 +103,10 @@ void GameClass::Verify (size_t i, size_t j) {
       }
       next[j] = rand()%cMaxObjects;
     }
+    killed = true;
   }
+
+  return killed;
 }
 
 void GameClass::RemoveH (size_t i, size_t j, size_t n) {

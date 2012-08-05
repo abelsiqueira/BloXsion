@@ -21,7 +21,7 @@ class GameClass {
     int AllegroInitialization ();
 
     void Update ();
-    void Verify (size_t, size_t);
+    bool Verify (size_t, size_t);
     size_t HorizontalConsecutive (int, size_t, size_t) const;
     size_t VerticalConsecutive (int, size_t, size_t) const;
     void RemoveH (size_t, size_t, size_t);
@@ -31,8 +31,10 @@ class GameClass {
 
     ALLEGRO_COLOR GetColor(int) const;
     void DrawGame () const;
+    void DrawHud () const;
     void DrawObject (bool, int, float, float) const;
     void DrawObject (float, float, ALLEGRO_COLOR) const;
+    void DrawObject (float, float, float, ALLEGRO_COLOR) const;
 
     // Game
     int **grid, **gridNew, *next;
@@ -41,7 +43,8 @@ class GameClass {
     size_t iFirst, jFirst, iSecond, jSecond;
     int redDiff, greenDiff, blueDiff;
     int swapCount;
-    bool swapping;
+    bool swapping, justMoved;
+    int lives;
 
     // Allegro
     ALLEGRO_DISPLAY *display;
@@ -59,6 +62,8 @@ class GameClass {
     bool hasFailed;
     int errorValue;
     float falling;
+
+    float hudWidth;
 };
 
 #endif
