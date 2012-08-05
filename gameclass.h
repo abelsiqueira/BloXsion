@@ -30,7 +30,7 @@ class GameClass {
     void Down (size_t, size_t);
 
     void DrawGame () const;
-    void DrawBall (bool, int, float, float) const;
+    void DrawObject (bool, int, float, float) const;
 
     // Game
     int **grid, **gridNew, *next;

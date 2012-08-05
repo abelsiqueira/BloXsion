@@ -7,7 +7,7 @@ const int cWindowWidth = 800;
 const int cWindowHeight = 800;
 const int cFps = 60;
 const int cTileSize = 100;
-const int cMaxBalls = 6;
-const float fallingSpeed = 4;
+const int cMaxObjects = 6;
+const float fallingSpeed = 5;
 
 #endif

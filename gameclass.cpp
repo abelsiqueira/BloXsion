@@ -31,13 +31,14 @@ GameClass::GameClass () {
     grid[i] = new int[gridWidth];
     gridNew[i] = new int[gridWidth];
     for (size_t j = 0; j < gridWidth; j++) {
-      grid[i][j] = rand()%cMaxBalls;
+//      grid[i][j] = rand()%cMaxObjects;
+      grid[i][j] = -1;
       gridNew[i][j] = grid[i][j];
     }
   }
   next = new int[gridWidth];
   for (size_t j = 0; j < gridWidth; j++)
-    next[j] = rand()%cMaxBalls;
+    next[j] = rand()%cMaxObjects;
 
 }
 

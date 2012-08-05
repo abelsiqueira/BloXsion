@@ -34,7 +34,7 @@ void GameClass::Fall () {
           locked = true;
           falling = cTileSize;
           for (size_t k = 0; k < gridWidth; k++)
-            next[k] = rand()%cMaxBalls;
+            next[k] = rand()%cMaxObjects;
           break;
         }
       }
@@ -79,7 +79,7 @@ void GameClass::Verify (size_t i, size_t j) {
       for (size_t i = 0; i < gridHeight; i++) {
         gridNew[i][j] = grid[i][j];
       }
-      next[j] = rand()%cMaxBalls;
+      next[j] = rand()%cMaxObjects;
     }
   }
 }
