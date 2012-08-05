@@ -29,7 +29,7 @@ GameClass::GameClass () {
   firstChosen = false;
   swapCount = 0;
   swapping = false;
-  lives = 1;
+  lives = 3;
   justMoved = false;
   score = 0;
   numberKilled = 0;
@@ -41,7 +41,8 @@ GameClass::GameClass () {
     grid[i] = new int[gridWidth];
     gridNew[i] = new int[gridWidth];
     for (size_t j = 0; j < gridWidth; j++) {
-      grid[i][j] = -1;
+      int obj = (i + j)%numberOfObjects;
+      grid[i][j] = obj;
       gridNew[i][j] = grid[i][j];
     }
   }

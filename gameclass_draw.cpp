@@ -113,6 +113,12 @@ ALLEGRO_COLOR GameClass::GetColor (int b) const {
     case 5:
       color = al_map_rgb(0,cColorIntensity,cColorIntensity);
       break;
+    case 6:
+      color = al_map_rgb(cColorIntensity,cColorIntensity,cColorIntensity);
+      break;
+    case 7:
+      color = al_map_rgb(cColorIntensity/3,cColorIntensity/3,cColorIntensity/3);
+      break;
     default:
       return color;
       break;
